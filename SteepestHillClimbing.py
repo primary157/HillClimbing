@@ -5,9 +5,12 @@ def generate_random(min, max):
     return (max - min) * random.Random().random() + min
 
 
+'''
+Base class for SteepestHillClimbing metaheuristics
+'''
 class SteepestHillClimbing:
     def __init__(self, min, max, p, l):
-        self.min = [min] * l
+        self.min = [min] * l  # All axis limits are the same in my implementation for easy of use
         self.max = [max] * l
         self.p = p
         self.l = l
@@ -15,16 +18,16 @@ class SteepestHillClimbing:
     def function(self, n):
         raise NotImplementedError("Please Implement this method with a testing function!")
 
-    def init(self):
-        v = [None] * self.l
+    def init(self):  # Initialize random candidate solution
+        v = []
         for i in range(self.l):
-            v[i] = generate_random(self.min[i], self.max[i])
+            v.append(generate_random(self.min[i], self.max[i]))
         return v
 
     def tweak(self, v):
-        r = [None] * self.l
-        for i in range(self.l):
-            if self.p >= generate_random(0, 1):
+        r = [None] * self.l  # Initialize empty vector
+        for i in range(self.l):  # For each variable
+            if self.p >= generate_random(0, 1):  # Check if it should tweak
                 while True:
                     r[i] = generate_random(v[i] * 0.95, v[i] * 1.05)  # add noise of +/- 5%
                     if self.min[i] <= r[i] <= self.max[i]:  # test limits
